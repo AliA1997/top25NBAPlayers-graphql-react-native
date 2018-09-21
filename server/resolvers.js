@@ -7,6 +7,20 @@ const resolver = {
                 if(err) throw err;
                 return players.sort((playerA, playerB) => playerA.rank < playerB.rank)
             })
+        },
+        player: (_, args, context) => {
+            if(args.rank && !args.name) Player.findOne({rank: args.rank}, (err, player) => {
+                if(err) throw err;
+                return player[0];
+            });
+            else if(!args.rank && args.name) Player.findOne({name: args.name}, (err, player) => {
+                if(err) throw err;
+                return player[0];
+            })
+            else Player.findOne({name: args.name, rank: args.rank}, (err, player) => {
+                if(err) throw err;
+                return player[0];
+            })
         }
     },
     Mutation: {
